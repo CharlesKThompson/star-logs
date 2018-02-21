@@ -18,10 +18,26 @@ router.get('/api/comments/:id', (req, res, next) => {
         .catch(next)
 })
 
-router.post('/api/comments', (req, res, next) => {
-    CommentModel.create(req.body)
+router.post('/api/ships/:shipId/logs/:logId/comments', (req, res, next) => {
+    var commentObj = {
+        author: req.body.author,
+        topic: req.body.topic,
+        text: req.body.text,
+        logId: req.params.logId,
+        shipId: req.params.shipId
+
+    }
+    CommentModel.create(commentObj)
         .then(comment => {
             res.send({ message: "succesfully posted comment", data: comment })
+        })
+        .catch(next)
+})
+
+router.put('/api/comments/:id', (req, res, next) => {
+    CommentModel.findByIdAndUpdate(req.params.id, req.body)
+        .then(comment => {
+            res.send({ message: "update authenticated!,", data: comment })
         })
         .catch(next)
 })

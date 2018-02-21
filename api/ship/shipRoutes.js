@@ -23,8 +23,50 @@ router.get('/api/ships/:id', (req, res, next) => {
 router.post('/api/ships', (req, res, next) => {
     Ship.create(req.body)
         .then(ship => {
-            
+
             res.send({ message: "succesfully posted ship", data: ship })
+        })
+        .catch(next)
+})
+
+
+router.get('/api/ships/:shipId/logs', (req, res, next) => {
+    Log.find({ shipId: req.params.shipId })
+        .then(logs => {
+            res.send(logs)
+        })
+        .catch(next)
+})
+
+router.get('/api/ships/:shipId/logs/:logId', (req, res, next) => {
+    console.log(req.params.logId, req.params.shipId)
+    Log.find({ _id: req.params.logId, shipId: req.params.shipId })
+        .then(log => {
+            res.send(log)
+        })
+        .catch(next)
+})
+
+router.get('/api/ships/:shipId/comments', (req, res, next) => {
+    CommentModel.find({ shipId: req.params.shipId })
+        .then(logs => {
+            res.send(logs)
+        })
+        .catch(next)
+})
+
+router.get('/api/ship/:shipId/comments/:commentId', (req, res, next) => {
+    CommentModel.find({ _id: req.params.commentId, shipId: req.params.shipId })
+        .then(log => {
+            res.send(log)
+        })
+        .catch(next)
+})
+
+router.put('/api/ships/:id', (req, res, next) => {
+    Ship.findByIdAndUpdate(req.params.id, req.body)
+        .then(ship => {
+            res.send({ message: "authenticated ship transfer", data: ship })
         })
         .catch(next)
 })
@@ -36,38 +78,5 @@ router.delete('/api/ships/:id', (req, res, next) => {
         })
         .catch(next)
 })
-
-router.get('api/ships/:shipId/logs', (req, res, next) => {
-    Log.find({ shipId: req.params.shipId })
-        .then(logs => {
-            res.send(logs)
-        })
-        .catch(next)
-})
-
-router.get('api/ships/:shipId/logs/:logId', (req, res, next) => {
-    Log.find({ _id: req.params.logId, shipId: req.params.shipId })
-        .then(log => {
-            res.send(log)
-        })
-        .catch(next)
-})
-
-router.get('api/ships/:shipId/comments', (req, res, next) => {
-    CommentModel.find({ shipId: req.params.shipId })
-        .then(logs => {
-            res.send(logs)
-        })
-        .catch(next)
-})
-
-router.get('api/ship/:shipId/comments/:commentId', (req, res, next) => {
-    CommentModel.find({ _id: req.params.commentId, shipId: req.params.shipId })
-        .then(log => {
-            res.send(log)
-        })
-        .catch(next)
-})
-
 
 module.exports = { router }

@@ -32,15 +32,7 @@ router.post('/api/ships/:shipId/logs', (req, res, next) => {
         .catch(next)
 })
 
-router.delete('/api/logs/:id', (req, res, next) => {
-    Log.findByIdAndRemove(req.params.id)
-        .then(log => {
-            res.send({ message: "successfully deleted log" })
-        })
-        .catch(next)
-})
-
-router.get('api/logs/:logId/logs', (req, res, next) => {
+router.get('/api/logs/:logId/logs', (req, res, next) => {
     CommentModel.find({ logId: req.params.logId })
         .then(comments => {
             res.send(comments)
@@ -48,10 +40,26 @@ router.get('api/logs/:logId/logs', (req, res, next) => {
         .catch(next)
 })
 
-router.get('api/logs/:logId/comments/:commentId', (req, res, next) => {
+router.get('/api/logs/:logId/comments/:commentId', (req, res, next) => {
     CommentModel.find({ _id: req.params.commentId, logId: req.params.logId })
         .then(comment => {
             res.send(comment)
+        })
+        .catch(next)
+})
+
+router.put('/api/logs/:id', (req, res, next) => {
+    Log.findByIdAndUpdate(req.params.id, req.body)
+    .then(log => {
+        res.send({ message: "authenticated!", data: log})
+    })
+    .catch(next)
+})
+
+router.delete('/api/logs/:id', (req, res, next) => {
+    Log.findByIdAndRemove(req.params.id)
+        .then(log => {
+            res.send({ message: "successfully deleted log" })
         })
         .catch(next)
 })
